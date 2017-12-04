@@ -1,15 +1,15 @@
 A fork of the defunct [BitPay Node.js API Client](https://github.com/bitpay/node-bitpay-client/), updated for use with Firebase Functions/ Cloud Functions
+
+
 Created because of this [issue](https://github.com/bitpay/node-bitpay-client/issues/87)
 
 ==========================
 [![Build Status](https://travis-ci.org/evberrypi/bitpay-serverless.svg)](https://travis-ci.org/evberrypi/bitpay-serverless)
 
-A Node.js module and command line client for interacting with
-[BitPay's Cryptographically Secure API](https://bitpay.com/api).
 
 ## Getting Started
 
-Install using [Node Package Manager](https://www.npmjs.org/).. Alternatively use Yarn
+Install using [Node Package Manager](https://www.npmjs.org/)... Alternatively use Yarn
 ```
 ~# npm install bitpay-serverless
 
@@ -116,6 +116,7 @@ For more information on how to use the CLI, run:
 
 If you are running this module as a Firebase Function, save the `api.key` and  `password` variables as environment variables as outlined [here](https://firebase.google.com/docs/functions/config-env)
 
+### Firebase Config
 
 ```
 firebase functions.config.set bitpay.pass="apiPasswordGoesHere" bitpay.key='apiKeyGoesHere'
