@@ -2,8 +2,7 @@ A fork of the defunct [BitPay Node.js API Client](https://github.com/bitpay/node
 Created because of this [issue](https://github.com/bitpay/node-bitpay-client/issues/87)
 
 ==========================
-[![Build Status](https://travis-ci.org/evberrypi/bitpay-serverless.svg)](https://travis-ci.org/bitpay/node-bitpay-client)
-[![Coverage Status](https://coveralls.io/repos/bitpay/node-bitpay-client/badge.png?branch=master)](https://coveralls.io/r/bitpay/node-bitpay-client?branch=master)
+[![Build Status](https://travis-ci.org/evberrypi/bitpay-serverless.svg)](https://travis-ci.org/evberrypi/bitpay-serverless)
 
 A Node.js module and command line client for interacting with
 [BitPay's Cryptographically Secure API](https://bitpay.com/api).
@@ -184,7 +183,7 @@ client.get('invoices', function(err, invoices) {
 });
 ```
 
-Arguments for creating invoices can be viewed here: https://bitpay.com/api#resource-Invoices
+Arguments for creating invoices can be viewed [here](https://bitpay.com/api#resource-Invoices)
 
 ### Assuming a Different Facade
 
