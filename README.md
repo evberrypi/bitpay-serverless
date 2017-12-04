@@ -1,6 +1,8 @@
-BitPay Node.js API Client
+A fork of the defunct [BitPay Node.js API Client](https://github.com/bitpay/node-bitpay-client/), updated for use with Firebase Functions/ Cloud Functions
+Created because of this [issue](https://github.com/bitpay/node-bitpay-client/issues/87)
+
 ==========================
-[![Build Status](https://travis-ci.org/bitpay/node-bitpay-client.svg)](https://travis-ci.org/bitpay/node-bitpay-client)
+[![Build Status](https://travis-ci.org/evberrypi/bitpay-serverless.svg)](https://travis-ci.org/bitpay/node-bitpay-client)
 [![Coverage Status](https://coveralls.io/repos/bitpay/node-bitpay-client/badge.png?branch=master)](https://coveralls.io/r/bitpay/node-bitpay-client?branch=master)
 
 A Node.js module and command line client for interacting with
@@ -8,11 +10,12 @@ A Node.js module and command line client for interacting with
 
 ## Getting Started
 
-Install using [Node Package Manager](https://www.npmjs.org/).
+Install using [Node Package Manager](https://www.npmjs.org/).. Alternatively use Yarn
+```
+~# npm install bitpay-serverless
 
 ```
-~# npm install bitpay-rest
-```
+
 
 If you do not use NPM to install (instead cloning this repository), you will
 need to run the following from the project root:
@@ -26,7 +29,7 @@ need to run the following from the project root:
 Set up your client's private key:
 
 ```
-./node_modules/bitpay-rest/bin/bitpay.js keygen
+./node_modules/bitpay-serverless/bin/bitpay.js keygen
 < enter a password, or hit enter for no password >
 Generating keys...
 Keys saved to: /Users/<your_username>/.bitpay
@@ -34,7 +37,7 @@ Keys saved to: /Users/<your_username>/.bitpay
 Next you have to pair up your client's private key with your bitpay account. This is done by requesting a pairing code:
 
 ```
-./node_modules/bitpay-rest/bin/bitpay.js pair
+./node_modules/bitpay-serverless/bin/bitpay.js pair
 Do you have a pairing code?
 no < hit enter twice >
 Okay, we can get a pairing code, please choose a facade:
@@ -45,14 +48,18 @@ This will spit out a bunch of output. At the end of it will be a URL:
 ```
 Pair this client with your organization:
 https://test.bitpay.com/api-access-request?pairingCode=XXX
+
+If you are using production mode:
+https://bitpay.com/api-access-request?pairingCode=XXX
+
 ```
 Visit this URL in your browser and hit the approve button. Afterwards, you can test creating a basic invoice from the command line like this:
 
 ```
 //If you selected #1 then use this:
-./node_modules/bitpay-rest/bin/bitpay.js request -T pos -X post -R invoices -P '{"price": 1, "currency": "USD"}'
+./node_modules/bitpay-serverless/bin/bitpay.js request -T pos -X post -R invoices -P '{"price": 1, "currency": "USD"}'
 //If you selected #2 then use this:
-./node_modules/bitpay-rest/bin/bitpay.js request -T merchant -X post -R invoices -P '{"price": 1, "currency": "USD"}'
+./node_modules/bitpay-serverless/bin/bitpay.js request -T merchant -X post -R invoices -P '{"price": 1, "currency": "USD"}'
 ```
 If it worked, you'll see some JSON outputted regarding the newly created invoice. If you get an error like this:
 ```
@@ -108,23 +115,35 @@ For more information on how to use the CLI, run:
 ~# bitpay --help
 ```
 
+If you are running this module as a Firebase Function, save the `api.key` and  `password` variables as environment variables as outlined [here](https://firebase.google.com/docs/functions/config-env)
+
+
+```
+firebase functions.config.set bitpay.pass="apiPasswordGoesHere" bitpay.key='apiKeyGoesHere'
+```
 ### Module
 
-To use this as a client library you'll actually need both bitpay and bitauth.
+Unlike in the original bitpay-rest module, bitpay-serverless is a standalone library, you will not need bitauth.
 
-```npm install bitpay-rest bitauth```
 
 Here's a basic example for creating an invoice:
 ```js
-var bitpay = require('bitpay-rest');
-// need bitauth too
-var bitauth = require('bitauth');
-
+var bitpay = require('bitpay-serverless');
 // NOTE: necessary to decrypt your key even if you didn't enter a password when you generated it.
 // If you did specify a password, pass it as the first param to bitauth.decrypt()
-var privkey = bitauth.decrypt('', fs.readFileSync('/path/to/.bitpay/api.key', 'utf8'));
+ const pass = functions.config().bitpay.pass; 
+  const key = functions.config().bitpay.key;  
+  const privkey = bitauth.decrypt(pass, key)
+  // console.log(privkey)
 
-var client = bitpay.createClient(privkey);
+// Note the original bitpay-rest was not accepting the local configuration file so it would not work on Firebase. 
+// It is fixed not
+var client = bitpay.createClient(privKey, {
+  config: {
+    apiHost: 'bitpay.com', // if testing, pass `test.bitpay.com` here instead
+    apiPort: 443
+  }});
+
 client.on('error', function(err) {
   // handle client errors here
   console.log(err);
@@ -150,6 +169,7 @@ client.on('ready', function(){
     }
   });
 });
+
 ```
 
 When resources are returned, they get extended with the same methods as the
@@ -165,23 +185,6 @@ client.get('invoices', function(err, invoices) {
 ```
 
 Arguments for creating invoices can be viewed here: https://bitpay.com/api#resource-Invoices
-
-### Overloading Configuration
-
-The BitPay client loads a configuration file from `~/.bitpay/config.json` by
-default, which it creates after installation. You can override this default
-configuration, by passing a `config` value in the options argument.
-
-Example:
-
-```js
-var client = bitpay.createClient(privKey, {
-  config: {
-    apiHost: 'bitpay.com',
-    apiPort: 443
-  }
-});
-```
 
 ### Assuming a Different Facade
 

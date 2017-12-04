@@ -1,23 +1,9 @@
 {
-  "name": "bitpay-rest",
+  "name": "bitpay-serverless",
   "preferGlobal": false,
-  "version": "0.3.1",
-  "author": "Gordon Hall <gordon@bitpay.com>",
-  "description": "",
-  "contributors": [
-    {
-      "name": "Patrick Nagurny",
-      "email": "patrick@bitpay.com"
-    },
-    {
-      "name": "Eric Martindale",
-      "email": "eric@bitpay.com"
-    },
-    {
-      "name": "Rob Riddle",
-      "email": "rob@bitpay.com"
-    }
-  ],
+  "version": "0.3.2",
+  "author": "evberrypi",
+  "description": "Fork of bitpay-rest for serverless",
   "bin": {
     "bitpay": "bin/bitpay.js"
   },
@@ -30,7 +16,7 @@
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/bitpay/node-bitpay-client.git"
+    "url": "https://github.com/evberrypi/node-bitpay-client.git"
   },
   "keywords": [
     "bitpay",
