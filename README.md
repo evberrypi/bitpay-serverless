@@ -68,7 +68,7 @@ Then something is wrong, either you used the wrong line, or you haven't approved
 
 For this utility Bitpay's test platform is used by default, so if you want to use the regular production platform (ie. bitpay.com and not test.bitpay.com), do this:
 ```
-./node_modules/bitpay-rest/bin/bitpay.js config --use prod
+./node_modules/bitpay-serverless/bin/bitpay.js config --use prod
 ```
 You'll need to pair again as well to get a new token for the production environment.
 
@@ -81,7 +81,7 @@ Use the `bitpay` command line program to generate your client keys and
 associate them with your account.
 
 ```
-~# cd bitpay-rest && npm link
+~# cd bitpay-serverless && npm link
 ~# bitpay keygen
 ~# bitpay pair
 ```
@@ -135,8 +135,7 @@ var bitauth = require('bitauth')
   const privkey = bitauth.decrypt(pass, key)
   // console.log(privkey)
 
-// Note the original bitpay-rest was not accepting the local configuration file so it would not work on Firebase. 
-// It is fixed not
+// Client Configuration with options:
 var client = bitpay.createClient(privKey, {
   config: {
     apiHost: 'bitpay.com', // if testing, pass `test.bitpay.com` here instead
