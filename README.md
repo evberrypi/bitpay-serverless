@@ -15,7 +15,6 @@ Install using [Node Package Manager](https://www.npmjs.org/)... Alternatively us
 
 ```
 
-
 If you do not use NPM to install (instead cloning this repository), you will
 need to run the following from the project root:
 
@@ -123,12 +122,12 @@ firebase functions.config.set bitpay.pass="apiPasswordGoesHere" bitpay.key='apiK
 ```
 ### Module
 
-Unlike in the original bitpay-rest module, bitpay-serverless is a standalone library, you will not need bitauth.
 
 
-Here's a basic example for creating an invoice:
+Here's a basic example for creating an invoice as a firebase http function, it can also be written as a non-http function
 ```js
 var bitpay = require('bitpay-serverless');
+var bitauth = require('bitauth')
 // NOTE: necessary to decrypt your key even if you didn't enter a password when you generated it.
 // If you did specify a password, pass it as the first param to bitauth.decrypt()
  const pass = functions.config().bitpay.pass; 
